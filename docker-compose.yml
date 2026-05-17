@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  # Бэкенд (FastAPI)
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: sh -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    ports:
+      - "8000:8000"
+    env_file: .env
+
+  # Фронтенд (Node.js)
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules # Чтобы не затирать модули локальной папкой
+    ports:
+      - "5173:5173"
+
+  # Телеграм-бот (отключено)
+  # bot:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/Dockerfile.bot
+  #   command: python -m tgbot.main -d
+  #   volumes:
+  #     - ./data:/app/data
+  #     - ./uploads:/app/uploads
+  #   depends_on:
+  #     - backend
+  #   env_file: .env
+  #   environment:
+  #     - BOT_TOKEN=${BOT_TOKEN}
+  #     - BOT_ADMIN=${BOT_ADMIN}
