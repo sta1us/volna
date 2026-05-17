@@ -2,9 +2,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from pydantic import BaseModel, Field, computed_field
-
 from common.models import MediaType
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 from src.schemas.common import BaseMessageResponse
 
 
@@ -48,15 +47,14 @@ class MediaRead(BaseModel):
     file_path: str = Field(..., description="Внутренний путь к файлу на сервере")
     created_at: datetime = Field(..., description="Дата и время загрузки файла (UTC)")
 
+    model_config = ConfigDict(from_attributes=True)
+
     @computed_field
     @property
     def media_url(self) -> str:
         """Автоматически преобразует внутренний путь во внешний веб-URL для фронтенда."""
         posix_path = Path(self.file_path).as_posix()
         return f"/{posix_path}" if not posix_path.startswith("/") else posix_path
-
-    class Config:
-        from_attributes = True
 
 
 class MediaUploadPayload(BaseModel):

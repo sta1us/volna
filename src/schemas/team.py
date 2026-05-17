@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import Form
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 
 class TeamMemberRead(BaseModel):
@@ -16,6 +16,7 @@ class TeamMemberRead(BaseModel):
     description: str = Field(..., description="Информация о сотруднике/достижения")
     order_priority: int = Field(..., description="Приоритет ручной сортировки карточек")
     image_path: str = Field(..., description="Внутренний путь к файлу на сервере")
+    model_config = ConfigDict(from_attributes=True)
 
     @computed_field
     @property
@@ -31,9 +32,6 @@ class TeamMemberRead(BaseModel):
         """Автоматически преобразует внутренний путь во внешний веб-URL для фронтенда."""
         posix_path = Path(self.image_path).as_posix()
         return f"/{posix_path}" if not posix_path.startswith("/") else posix_path
-
-    class Config:
-        from_attributes = True
 
 
 class TeamMemberCreate(BaseModel):

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class UserShort(BaseModel):
@@ -14,9 +14,7 @@ class UserShort(BaseModel):
     first_name: Optional[str] = Field(
         None, description="Имя, указанное в мессенджере", examples=["Иван"]
     )
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ReactionStats(BaseModel):

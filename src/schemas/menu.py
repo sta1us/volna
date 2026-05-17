@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from pydantic import BaseModel, Field, computed_field
-
 from common.models import MenuCategory
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 
 class MenuPageRead(BaseModel):
@@ -16,6 +15,7 @@ class MenuPageRead(BaseModel):
         ..., description="Внутренний относительный путь к файлу изображения на сервере"
     )
     order_num: int = Field(..., description="Порядковый номер страницы для сортировки")
+    model_config = ConfigDict(from_attributes=True)
 
     @computed_field
     @property
@@ -23,9 +23,6 @@ class MenuPageRead(BaseModel):
         """Автоматически преобразует внутренний путь во внешний URL для фронтенда."""
         posix_path = Path(self.image_path).as_posix()
         return f"/{posix_path}" if not posix_path.startswith("/") else posix_path
-
-    class Config:
-        from_attributes = True  # Позволяет Pydantic работать с моделями SQLAlchemy
 
 
 class MenuPageCreate(BaseModel):

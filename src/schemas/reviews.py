@@ -1,9 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
-
 from common.models import ReviewStatus
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ReviewCreate(BaseModel):
@@ -52,9 +51,7 @@ class ReviewRead(BaseModel):
     text: str = Field(..., description="Модерированный текст отзыва")
     rating: int = Field(..., description="Оценка")
     created_at: datetime = Field(..., description="Дата публикации (UTC)")
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AdminReviewRead(BaseModel):
@@ -79,9 +76,7 @@ class AdminReviewRead(BaseModel):
         ..., description="Просил ли пользователь скрыть его профиль на сайте"
     )
     created_at: datetime = Field(..., description="Дата создания отзыва")
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ReviewStatusUpdate(BaseModel):

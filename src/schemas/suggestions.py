@@ -1,9 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
-
 from common.models import SuggestionStatus
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class SuggestionCreate(BaseModel):
@@ -54,9 +53,7 @@ class SuggestionRead(BaseModel):
     is_read: bool = Field(..., description="Флаг прочтения администратором")
     status: SuggestionStatus = Field(..., description="Текущий статус обработки")
     created_at: datetime = Field(..., description="Дата и время отправки (UTC)")
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SuggestionStatusUpdate(BaseModel):

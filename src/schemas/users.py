@@ -1,8 +1,7 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
-
 from common.models import UserRole
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class UsersRead(BaseModel):
@@ -19,10 +18,7 @@ class UsersRead(BaseModel):
     first_name: Optional[str] = Field(
         None, description="Имя пользователя из Telegram", examples=["Алексей"]
     )
-
-    class Config:
-        # ИСПРАВЛЕНО: Добавлен конфигурационный класс для автоматического парсинга SQLAlchemy-моделей
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UsersRoleUpdate(BaseModel):

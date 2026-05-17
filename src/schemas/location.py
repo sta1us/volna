@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, Field, computed_field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, computed_field
 
 
 class LocationFormPayload(BaseModel):
@@ -112,6 +112,7 @@ class LocationRead(BaseModel):
     map_image_path: Optional[str] = Field(
         None, description="Внутренний путь к изображению карты"
     )
+    model_config = ConfigDict(from_attributes=True)
 
     @computed_field
     @property
@@ -130,6 +131,3 @@ class LocationRead(BaseModel):
             return None
         posix_path = Path(self.image_path).as_posix()
         return f"/{posix_path}" if not posix_path.startswith("/") else posix_path
-
-    class Config:
-        from_attributes = True

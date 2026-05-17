@@ -1,10 +1,9 @@
 from datetime import datetime
 from typing import Optional
 
-from fastapi import Form
-from pydantic import BaseModel, Field, computed_field
-
 from common.models import ReactionStatus
+from fastapi import Form
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 from src.schemas.common import BaseMessageResponse
 
 
@@ -32,14 +31,13 @@ class EventRead(BaseModel):
         None, description="ID файла в системе Telegram для ботов"
     )
 
+    model_config = ConfigDict(from_attributes=True)
+
     @computed_field
     @property
     def image_url(self) -> str:
         """Динамически вычисляемый абсолютный/относительный URL для фронтенда."""
         return f"/{self.image_path}"
-
-    class Config:
-        from_attributes = True
 
 
 class EventCreate(BaseModel):
@@ -153,8 +151,7 @@ class EventReactionRead(BaseModel):
     user_id: int = Field(..., description="ID пользователя, оставившего отклик")
     status: ReactionStatus = Field(..., description="Текущий статус отклика")
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class StatMessageResponse(BaseMessageResponse):
