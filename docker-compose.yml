@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    command: sh -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000"
+    command: sh -c "alembic upgrade head && pytest src/tests/ -v &&  uvicorn src.main:app --host 0.0.0.0 --port 8000"
     volumes:
       - ./data:/app/data
       - ./uploads:/app/uploads
