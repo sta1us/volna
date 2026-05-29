@@ -72,7 +72,6 @@ const AdminDashboard = () => {
       icon: <Users />,
       path: "/admin/users",
       color: "bg-sky-500",
-      count: stats.pendingReviews,
       desc: "Список пользователей",
     },
     {
