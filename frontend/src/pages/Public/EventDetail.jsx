@@ -147,24 +147,27 @@ const EventDetail = () => {
           </div>
 
           {/* Галерея */}
-          <div className="mt-24">
-            <div className="flex items-end justify-between mb-12">
-              <div>
-                <h2 className="text-4xl font-black text-slate-900 flex items-center gap-4">
-                  Медиа <Camera size={36} className="text-indigo-500" />
-                </h2>
-                <p className="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">
-                  Галерея моментов
-                </p>
+          {media.length > 0 && (
+            <div className="mt-24">
+              <div className="flex items-end justify-between mb-12">
+                <div>
+                  <h2 className="text-4xl font-black text-slate-900 flex items-center gap-4">
+                    Медиа <Camera size={36} className="text-indigo-500" />
+                  </h2>
+                  <p className="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">
+                    Галерея моментов
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {displayItems.map((item, index) => (
-                <div
-                  key={item.id || index}
-                  onClick={() => !item.isPlaceholder && setSelectedIndex(index)}
-                  className={`
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {displayItems.map((item, index) => (
+                  <div
+                    key={item.id || index}
+                    onClick={() =>
+                      !item.isPlaceholder && setSelectedIndex(index)
+                    }
+                    className={`
                     group relative aspect-square rounded-[2.5rem] overflow-hidden transition-all duration-500
                     ${
                       item.isPlaceholder
@@ -172,57 +175,58 @@ const EventDetail = () => {
                         : "bg-slate-100 cursor-pointer hover:shadow-2xl hover:shadow-indigo-200 hover:-translate-y-3"
                     }
                   `}
-                >
-                  {!item.isPlaceholder ? (
-                    <>
-                      {item.media_type === "video" ? (
-                        <div className="w-full h-full relative">
-                          <video
+                  >
+                    {!item.isPlaceholder ? (
+                      <>
+                        {item.media_type === "video" ? (
+                          <div className="w-full h-full relative">
+                            <video
+                              src={
+                                item.file_path?.startsWith("http")
+                                  ? item.file_path
+                                  : `${API_URL}/${item.file_path}`
+                              }
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              muted
+                              playsInline
+                            />
+                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/40 transition-all">
+                              <div className="bg-white/20 backdrop-blur-xl p-5 rounded-full text-white transform scale-90 group-hover:scale-110 transition-all shadow-2xl">
+                                <Film size={24} fill="white" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <img
                             src={
                               item.file_path?.startsWith("http")
                                 ? item.file_path
                                 : `${API_URL}/${item.file_path}`
                             }
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            muted
-                            playsInline
+                            alt="Moment"
                           />
-                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/40 transition-all">
-                            <div className="bg-white/20 backdrop-blur-xl p-5 rounded-full text-white transform scale-90 group-hover:scale-110 transition-all shadow-2xl">
-                              <Film size={24} fill="white" />
-                            </div>
-                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3">
+                          <Camera size={20} className="text-slate-300" />
                         </div>
-                      ) : (
-                        <img
-                          src={
-                            item.file_path?.startsWith("http")
-                              ? item.file_path
-                              : `${API_URL}/${item.file_path}`
-                          }
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          alt="Moment"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3">
-                        <Camera size={20} className="text-slate-300" />
-                      </div>
-                      <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
-                        Скоро
-                      </span>
-                    </>
-                  )}
-                </div>
-              ))}
+                        <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
+                          Скоро
+                        </span>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Секция реакций */}
-          <div className="mt-24 pt-16 border-t border-slate-50">
+          <div className="mt-16 pt-16 border-t border-slate-50">
             <h4 className="text-center font-black text-2xl text-slate-900 mb-10">
               Будешь на волне?
             </h4>
