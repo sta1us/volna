@@ -77,7 +77,7 @@ class TeamMember(Base):
     role: Mapped[str] = mapped_column(
         String(100)
     )  # Текущая должность (напр. "Шеф-повар")
-    description: Mapped[str] = mapped_column(Text)  # Описание/Биография
+    description: Mapped[Optional[str]] = mapped_column(Text)  # Описание/Биография
 
     # МЕДИА
     image_path: Mapped[str] = mapped_column(String(255))  # Путь в uploads/team/

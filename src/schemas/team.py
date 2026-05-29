@@ -13,7 +13,7 @@ class TeamMemberRead(BaseModel):
     last_name: str = Field(..., description="Фамилия")
     middle_name: Optional[str] = Field(None, description="Отчество (при наличии)")
     role: str = Field(..., description="Должность (например: Шеф-повар)")
-    description: str = Field(..., description="Информация о сотруднике/достижения")
+    description: Optional[str] = Field(None, description="Информация о сотруднике/достижения")
     order_priority: int = Field(..., description="Приоритет ручной сортировки карточек")
     image_path: str = Field(..., description="Внутренний путь к файлу на сервере")
     model_config = ConfigDict(from_attributes=True)
