@@ -1,8 +1,7 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
-
 from common.models import UserRole
+from pydantic import BaseModel, Field
 
 
 class TelegramAuthPayload(BaseModel):
@@ -40,6 +39,14 @@ class TelegramAuthPayload(BaseModel):
         ...,
         description="Хэш-подпись (SHA-256) параметров запроса, сгенерированная на основе токена бота",
         examples=["c9e59...78ba9f"],
+    )
+    photo_url: Optional[str] = Field(
+        None,
+        max_length=150,
+        description="Ссылка на аватар, указанное в профиле Telegram",
+        examples=[
+            "https://t.me/i/userpic/320/eKY7RsV48pVRQn7ncwBNhRMFR347Eiad-XfP8He3Aww.jpg"
+        ],
     )
 
 
