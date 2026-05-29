@@ -7,7 +7,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.auth.dependencies import get_current_admin, get_current_user_or_none
 from src.schemas.common import BaseMessageResponse
-from src.schemas.reviews import ReviewCreate, ReviewRead, ReviewStatusUpdate
+from src.schemas.reviews import (
+    AdminReviewRead,
+    ReviewCreate,
+    ReviewRead,
+    ReviewStatusUpdate,
+)
 
 router = APIRouter(prefix="/reviews", tags=["Reviews"])
 
@@ -60,7 +65,7 @@ async def create_review(
     return new_review
 
 
-@router.get("/all", response_model=list[ReviewRead])
+@router.get("/all", response_model=list[AdminReviewRead])
 async def get_all_reviews(
     db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)
 ):

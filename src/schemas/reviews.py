@@ -72,9 +72,6 @@ class AdminReviewRead(BaseModel):
     status: ReviewStatus = Field(
         ..., description="Текущий статус модерации (pending/approved/rejected)"
     )
-    is_anonymous: bool = Field(
-        ..., description="Просил ли пользователь скрыть его профиль на сайте"
-    )
     created_at: datetime = Field(..., description="Дата создания отзыва")
     model_config = ConfigDict(from_attributes=True)
 
