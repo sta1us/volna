@@ -1,11 +1,10 @@
 from typing import Optional
 
+from common.database import get_db
+from common.models import Review, ReviewStatus, User
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from common.database import get_db
-from common.models import Review, ReviewStatus, User
 from src.auth.dependencies import get_current_admin, get_current_user_or_none
 from src.schemas.common import BaseMessageResponse
 from src.schemas.reviews import ReviewCreate, ReviewRead, ReviewStatusUpdate
@@ -162,4 +161,45 @@ async def change_review_status(
     return {
         "status": "success",
         "message": f"Статус отзыва успешно изменен на {data.status}.",
+    }
+
+
+@router.delete(
+    "/{review_id}",
+    response_model=BaseMessageResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def delete_review(
+    review_id: int,
+    db: AsyncSession = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    """
+    ## Удалить отзыв (Доступ: Администратор)
+
+    Безвозвратно удаляет отзыв из базы данных.
+
+    ### Параметры:
+    - **review_id** (Path): Идентификатор удаляемого отзыва.
+
+    ### Ошибки:
+    - **401/403**: Ошибки авторизации администратора.
+    - **404 Not Found**: Отзыв с таким ID не существует.
+
+    ### Возвращает:
+    - Объект `BaseMessageResponse` = `status` + `message`.
+    """
+    result = await db.execute(select(Review).where(Review.id == review_id))
+    review = result.scalar_one_or_none()
+
+    if not review:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Review not found"
+        )
+
+    await db.delete(review)
+    await db.commit()
+    return {
+        "status": "success",
+        "message": f"Review with ID {review_id} successuffy deleted.",
     }
