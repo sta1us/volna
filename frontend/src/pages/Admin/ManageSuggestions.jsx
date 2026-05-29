@@ -44,7 +44,7 @@ const ManageSuggestions = () => {
   const deleteSuggestion = async (id) => {
     if (window.confirm("Удалить предложение безвозвратно?")) {
       try {
-        await api.delete(`/suggestion/${id}`);
+        await api.delete(`/suggestions/${id}`);
         setSuggestions(suggestions.filter((r) => r.id !== id));
       } catch (err) {
         alert("Ошибка при удалении");
